@@ -1,6 +1,9 @@
-Ansible Test Image - Debian 10 (Stretch)
+Ansible Test Image - Debian 9 (Buster)
 =======================================
-This Docker container serves as a isolated testing environment for the development of Ansible roles and Playbooks on multiple operating systems. The primary use case was for [Molecule](https://molecule.readthedocs.io/en/stable/) testing. __It is not intended for production applications__.  
+
+[![Build Status](https://travis-ci.com/vantaworks/docker-debian0-ansible.svg?branch=master)](https://travis-ci.com/vantaworks/docker-debian0-ansible)
+
+This Docker container serves as a isolated testing environment for the development of Ansible roles and Playbooks and is part of a suite Docker images for that purpose. The primary use case is for [Molecule](https://molecule.readthedocs.io/en/stable/) testing. __It is not intended for production applications__.  
 
 Included Ansible developement tools
 * yamllint
@@ -14,19 +17,45 @@ Manual Build
 Upstream images will be provided automatically; however, for manual builds, the only pre-requisite is Docker installed on your system and a local checkout of this repo.
 
 1. `cd` to you local checkout of this repo
-2. Run `docker build -t debian10-ansible .`
+2. Run `docker build -t docker-debian0-ansible` or `make dist`
 
-Usage
------
+Manual Usage
+------------
 
-1. Pull the image (skip if you manually built it): `docker pull vantaworks/docker-debian10-ansible:latest`
-2. Running the image:
+These steps are only required if manual, one-off testing is used.
 
-Upstream: `docker run --detach --privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro vantaworks/docker-debian10-ansible:latest`
+1. Pull the image (skip if you manually built it): `docker pull thisisvantaworks/debian0-ansible:latest`
+2. Run the container:
 
-Maually built: `docker run --detach --privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro debian10-ansible:latest`
+```
+docker run --detach --privileged \
+  --name docker-debian0-ansible \
+  --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro \
+  --volume=`pwd`:/etc/ansible/roles/<role_under_test>:ro \
+  thisisvantaworks/debian0-ansible:latest
+```
 
-3. For Playbook Testing: I highly recommend looking into [Molecule](https://molecule.readthedocs.io/en/stable/)
+_Replace `<role_under_test>` with the name of your role._
+
+3. Execute `ansible-playbook` thusly: 
+```
+docker exec -it docker-debian0-ansible \
+  env TERM=xterm \
+  ansible-playbook /path/to/ansible/playbook.yml \
+  --syntax-check
+```
+
+Automated Build + Sanity Checks
+-------------------------------
+Build the container, and perform the supplied sanity checks by using the `all` make target. This is the proceedure used by automated builds to verify the container's functionality.
+
+```
+make all
+```
+
+Recommendations
+---------------
+For Playbook Testing: I highly recommend looking into [Molecule](https://molecule.readthedocs.io/en/stable/)
 
 Credits
 -------
