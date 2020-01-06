@@ -1,7 +1,7 @@
 Ansible Test Image - Debian 9 (Buster)
 =======================================
 
-[![Build Status](https://travis-ci.com/vantaworks/docker-debian0-ansible.svg?branch=master)](https://travis-ci.com/vantaworks/docker-debian0-ansible)
+[![Build Status](https://travis-ci.com/vantaworks/docker-debian9-ansible.svg?branch=master)](https://travis-ci.com/vantaworks/docker-debian9-ansible)
 
 This Docker container serves as a isolated testing environment for the development of Ansible roles and Playbooks and is part of a suite Docker images for that purpose. The primary use case is for [Molecule](https://molecule.readthedocs.io/en/stable/) testing. __It is not intended for production applications__.  
 
@@ -17,29 +17,29 @@ Manual Build
 Upstream images will be provided automatically; however, for manual builds, the only pre-requisite is Docker installed on your system and a local checkout of this repo.
 
 1. `cd` to you local checkout of this repo
-2. Run `docker build -t docker-debian0-ansible` or `make dist`
+2. Run `docker build -t docker-debian9-ansible` or `make dist`
 
 Manual Usage
 ------------
 
 These steps are only required if manual, one-off testing is used.
 
-1. Pull the image (skip if you manually built it): `docker pull thisisvantaworks/debian0-ansible:latest`
+1. Pull the image (skip if you manually built it): `docker pull thisisvantaworks/debian9-ansible:latest`
 2. Run the container:
 
 ```
 docker run --detach --privileged \
-  --name docker-debian0-ansible \
+  --name docker-debian9-ansible \
   --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro \
   --volume=`pwd`:/etc/ansible/roles/<role_under_test>:ro \
-  thisisvantaworks/debian0-ansible:latest
+  thisisvantaworks/debian9-ansible:latest
 ```
 
 _Replace `<role_under_test>` with the name of your role._
 
 3. Execute `ansible-playbook` thusly: 
 ```
-docker exec -it docker-debian0-ansible \
+docker exec -it docker-debian9-ansible \
   env TERM=xterm \
   ansible-playbook /path/to/ansible/playbook.yml \
   --syntax-check
